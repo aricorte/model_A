@@ -1346,11 +1346,20 @@ c                  read(*,*)yes
                     endif
 
 
+c                    if(abs(errj_min).gt.1000) errj_min=0                     
+c                    if(abs(errj_max).gt.1000) errj_max=0 
+c                    if(abs(errk_min).gt.1000) errk_min=0                     
+c                    if(abs(errk_max).gt.1000) errk_max=0         
+c                    if(abs(errl_min).gt.1000) errl_min=0                     
+c                    if(abs(errl_max).gt.1000) errl_max=0 
+c                    if(abs(errg_min).gt.1000) errg_min=0                     
+c                    if(abs(errg_max).gt.1000) errg_max=0       
+
+
+
                     write(77,20) errj_min+vp,errj_max+vp,errk_min+vr, 
      &                         errk_max+vr,errl_min+vphi,errl_max+vphi, 
-     &                         errg_min+vh,errg_max+vh,errf_min,
-     &                         errf_max
-                  
+     &                         errg_min+vh,errg_max+vh
 
 c                  if(cont.eq.3)then
                      
@@ -1373,7 +1382,7 @@ c   Commented by Loic to improve speed
 c               write(*,*)'number of planetariae',n
                close(10)
 c
- 20          format(10(1x,f8.3))
+ 20          format(10(1x,f15.3))
  1010        format(10(1x,f8.3))
 c rotation curve
 
@@ -1495,7 +1504,7 @@ c                      velavR(j)=velavR(j)/denR(j)
                        velavR(j)=abs(velavR(j)/den(j))
                       
                       do i=1,n
-
+ 
 c                         if((gg(i).ne.191).and.(gg(i).ne.43))then
 
                             if(((supp(j-1).le.abs(xs(i)))
@@ -1681,7 +1690,9 @@ c                enddo
 c             write(*,*)tot
 c            write(*,*)'sigma clipping?  0=no'
 c             read(*,*) cc
-c             if(cc.eq.0)goto 777
+             cc=1
+
+             if(cc.eq.0)goto 777
 
                
 c     sigma clipping

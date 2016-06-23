@@ -60,7 +60,7 @@ c       fat=716430.7
 
      
 
-      write(*,*)mue
+      write(*,*)'mue',mue
 
 
       write(*,*)'calculate R(C) disk'

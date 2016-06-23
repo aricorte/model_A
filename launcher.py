@@ -32,7 +32,7 @@ from functions import *
 reload(phot)
 
 
-def main():
+def main(use_hdu=False, model_dir=None):
 
     ###############################
     ### Test fortran compilers ####
@@ -51,9 +51,6 @@ def main():
             print c + " not found (this message is normal)"
 
     print "Will use " + fcompilator + " as fortran compilator"
-
-
-
 
 
     #####################################
@@ -89,10 +86,15 @@ def main():
     ML_command_file = "commands_for_ML"
     create_commands_ML(ML_command_file, nbins, PNtable)
 
+    #dir_ = "inputs / model_A01"
+    if use_hdu:
+        pos_angle, inclination = get_pos_angle_inclination("%s/galaxy.fits" % model_dir)
+    else:
+        pos_angle, inclination = config.pos_angle, config.inclination
 
     # Creates the file input_model_A.dat:
-    input_model_A(config, nbins, "input_model_A.dat")
-
+    input_model_A(config, nbins, "input_model_A.dat", pos_angle, inclination)
+    # input_model_A(config, nbins, "input_model_A.dat"
 
 
     #######################

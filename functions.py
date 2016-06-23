@@ -15,11 +15,19 @@ reload(config)
 import numpy as np
 
 
-def input_model_A(config, nbins, filename):
+def input_model_A(config, nbins, filename, pos_angle=None, inclination=None):
     """ creates a file with the parameters from the config.py, to be used by fortran
     :param config: configuration parameters
     :param filename: simple text file in which the config parameters are put, to be read in the fortran code
+    :param pos_angle: (optional) if passed, uses it, otherwise uses config.pos_angle
+    :param inclination: (optional) if passed, uses it, otherwise uses config.inclination
     """
+
+    if not pos_angle:
+        pos_angle = config.pos_angle
+    if not inclination:
+        inclination = config.inclination
+
     f = open(filename, "w")
     f.write(str(config.centerPNS['x']) + ' ')
     f.write(str(config.centerPNS['y']) + ' ')
@@ -28,8 +36,8 @@ def input_model_A(config, nbins, filename):
     f.write(str(config.pixel_scale) + ' ')
     f.write(str(config.gal_coord['RA']/u.deg) + ' ')
     f.write(str(config.gal_coord['Dec']/u.deg) + ' ')
-    f.write(str(config.pos_angle) + ' ')
-    f.write(str(config.inclination) + ' ')
+    f.write(str(pos_angle) + ' ')
+    f.write(str(inclination) + ' ')
     f.write(str(config.vel_ned) + ' ')
     f.write(str(int(nbins)) + ' ')
     f.close()
@@ -133,6 +141,32 @@ def get_galaxy_center(fitsfile):
     xvalue = float(xchar.split("+/-", 1)[0])
     yvalue = float(ychar.split("+/-", 1)[0])
     return {"x":xvalue, "y":yvalue}
+
+def get_pos_angle_inclination(fitsfile):
+    """Opens fit file to get information from the header.]
+
+    :param fitsfile: a fits file, e.g. 'inputs/model_A01/galaxy.fits'
+    :return: (pos_angle, inclination)
+    """
+
+    def extract_float(s):
+        if " " in s:
+            return float(s[:s.index(" ")])
+        return float(s)
+
+    hdulist = fits.open(fitsfile)
+    hdu = hdulist[0]
+
+    s_pa = hdu.header["1_PA"]
+    # s_inclination = hdu.header["1_AR"]
+    s_ar = hdu.header["1_AR"]
+
+    pa = extract_float(s_pa)+90
+    ar = extract_float(s_ar)
+
+    incl = acos(ar)*180/pi
+
+    return pa, incl
 
 
 def create_commands_ML(ML_command_file, nbins, PNtable):

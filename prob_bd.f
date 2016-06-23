@@ -502,7 +502,7 @@ c                  nbclip=0
                      if(pb(i).lt.0.45) idari(i)=0
                      if(idari(i).ne.flag_c(i)) idwrong(i)=1
 
-c                    write(*,*)'pb',pb(i),pd(i),flag_c(i),idwrong(i)
+                    write(*,*)'pb',pb(i),pd(i),flag_c(i),idwrong(i)
                     
                     nb=nb+pb(i)
                     write(*,*)'nb',nb,pb(i)

@@ -1,0 +1,41 @@
+"""
+This program does this and that.....
+
+"""
+
+import numpy as np
+import glob
+import os
+import sys
+import matplotlib.pyplot as plt
+import traceback
+from lib_plot_radial import *
+from likelihood import *
+
+
+###################################
+# program
+###################################
+
+# title = None
+# if len(sys.argv) > 1:
+#     title = sys.argv[1]
+# print "arguments:", sys.argv
+
+model_dirs = glob.glob("model_*")
+
+
+file_errors = open("not-run.log", "w")
+
+for dir_ in model_dirs:
+    try:
+        print "Generating figure for model ", dir_
+        plot_model(dir_, file_errors)
+        load_likelihood_error(dir_, file_errors)
+    except:
+        print "*** ERROR ***"
+        traceback.print_exc()
+        
+    
+
+

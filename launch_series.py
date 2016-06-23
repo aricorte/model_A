@@ -37,6 +37,7 @@ from functions import *
 # Change this if you want to run it only on one model/catalog. Else, put a '*' to do everything
 model_number = '*'
 catalog_number = '*'
+use_hdu = True
 
 # Creates the IRAF input directory where the fits files will be stored
 if not os.path.isdir(config.iraf_input_dir):
@@ -80,7 +81,7 @@ for model in list_of_models:
             shutil.rmtree(catalogDirectory)
         os.mkdir(catalogDirectory)
 
-        error_code = launcher.main()
+        error_code = launcher.main(use_hdu, model)
         if error_code == 0:
             for code in config.filestosave:
                 for file in config.filestosave[code]:
@@ -101,4 +102,3 @@ for model in list_of_models:
                 for file in config.filestosave["ML"]:
                     shutil.copyfile(file, os.path.join(catalogDirectory, os.path.basename(file)))
                 # Add creates an error and continues
-
